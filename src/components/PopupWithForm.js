@@ -1,48 +1,18 @@
-import Popup from './Popup.js';
+import React from 'react';
+import App from './App'
 
-export default class PopupWithForm extends Popup {
-    constructor(selector, formSubmit) {
-        super(selector);
-        this._formSubmit = formSubmit;
-        this._submitButton = this._popup.querySelector('.popup__button');
-        this._defaultButtonText = this._submitButton.textContent;
-    }
-    _getInputValues() {
-        // берём все инпуты 
-        this._inputList = this._popup.querySelectorAll('.popup__field');
-        // создаём пустой объект
-        this._formValues = {};
-        // добавляем в этот объет значения всех полей
-        this._inputList.forEach(input => {
-            this._formValues[input.name] = input.value;
-        });
-        // возвращаем объект
-        return this._formValues;
-    }
 
-    // функция вешает слушатели
-    setEventListeners() {
-        super.setEventListeners(); // наследуем метод из Popup.js
-        this._popup.querySelector('form').addEventListener('submit', (evt) => this._handleSubmitForm(evt));
-    }
-
-    // функция обработки отправки формы
-
-    _handleSubmitForm(evt) {
-        evt.preventDefault(); // отменяем привычное 
-        this._formSubmit(this._getInputValues()); // отправляем данные с импутов
-    }
-
-    setLoadingButtonText() {
-        this._submitButton.textContent = 'Загрузка...';
-    }
-
-    setDefaultButtonText() {
-        this._submitButton.textContent = this._defaultButtonText;
-    }
-
-    close() {
-        super.close();
-        this._popup.querySelector('form').reset(); // при закртыии сбрасываем форму
-    }
+export default function PopupWithForm (props) {
+    return (
+    <section className="popup popup__avatar">
+{console.log(props)}
+    <form className="popup__content popup__avatar-content" id="avatar-form" novalidate onСlick = {props.avatarIsOpen} >
+        <button className="popup__close-btn" type="button"></button>
+        <h3 className="popup__title ">Обновить аватар</h3>
+        <input className="popup__field" id="avatar-url-input" name="avatar" type="url" placeholder="Введите url" required></input>
+        <span className="popup__span-error" id="avatar-url-input-error"></span>
+        <button className="popup__button popup__button_form" type="submit" aria-label="Сохранить">Сохранить</button>
+    </form>
+</section>
+    ) 
 }
