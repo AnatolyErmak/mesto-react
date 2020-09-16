@@ -3,6 +3,7 @@ import Header from './header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm'
+import card from './Card'
 
 function App() {
   // переменные состояния
@@ -11,7 +12,6 @@ function App() {
   const [isAddCardOpen, setIsAddCardOpen] = React.useState(false);
   const [deleteIsOpen, setdeleteIsOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({        // попап картинки
-    isOpen: true,
     link: '',
     name: ''
   });
@@ -35,12 +35,8 @@ function App() {
   function handleEditAvatarClick() {
     setIsAvatarOpen(true);
   }
-  function handleCardClick (props) {
-    setSelectedCard({
-      isOpen: false,
-      link: props.link,
-      name: props.name
-    });
+  function handleCardClick (card) {
+    setSelectedCard(card);
   }
   
     return ( 
@@ -99,6 +95,7 @@ function App() {
         </>
       } onClose = {closeAllPopups}
       />
+      <Card card = {handleCardClick}/>
       
       
     </div>          
