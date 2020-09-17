@@ -3,13 +3,12 @@ import App from './App'
 
 // компонент карточки 
 
-function Card(props) {
-    function handleClick() {
-        <element onClick={_=> props.onClick(props.card)} />
-    }
+function Card (props) {
+  
     // отрисовка 
+    console.log(props)
     return (
-    <div className="element" onClick = {card}>
+    <div className="element" onClick >
       <button className="element__trash" type="button"></button>
       <img src="#" alt="название" class="element__image" />
       <div className="element__description">
@@ -23,3 +22,4 @@ function Card(props) {
     )
 }
 
+export default Card

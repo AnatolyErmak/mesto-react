@@ -3,7 +3,7 @@ import Header from './header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm'
-import card from './Card'
+import Card from './Card'
 
 function App() {
   // переменные состояния
