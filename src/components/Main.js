@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
-import api from './Api';
+import api from '../utils/api';
 import Card from './Card';
 
 
 export default function Main(props) {
+// переменные состояния
+const [userName, setUserName] = React.useState() // Имя пользователя
+const [userDescription , setUserDescription] = React.useState() // описание пользователя
+const [userAvatar, setUserAvatar] = React.useState() // Аватар
+const [cards, setCards] = React.useState([]); // Массив карточек
+
+useEffect(() => {
+  api.getInitialCards().then(cards => {
+    setCards(cards)
+  }, [])
+})
 
     return (
 <main className="main">
@@ -21,36 +32,8 @@ export default function Main(props) {
        <button className="profile__add-btn" type="button" onClick = {props.onAddPlace}></button>
      </section>
 
-     <section className="elements">
+     <section className="elements"></section>    
 
-     </section>
-    
-{/*       <PopupWithForm name = "popup_avatar" handler = {props.onEditAvatar} title = "Обновить аватар"
-      children = {
-        <>
-        <input className="popup__field" id="avatar-url-input" name="avatar" type="url" placeholder="Введите url" required></input>
-        <span className="popup__span-error" id="avatar-url-input-error"></span>
-        </>
-      } isOpen={props.onEditAvatar}
-      /> */}
-
-{/*      <section className="popup">
-       <input className="popup__content popup__content-profile" noValidate id="profile-form"></input>
-         <button className="popup__close-btn" type="button"></button>
-         <h3 className="popup__title">Редактировать профиль</h3>
-         <input className="popup__field popup__field_name" type="text" id="profile__input_name" placeholder="Имя" value="Жак-Ив Кусто"required minLength="2" maxLength="40" name = "name"
-         ></input>
-         <span className="popup__span-error" id="profile__input_name-error" ></span>
-
-         <input className="popup__field popup__field_about" type="text" name = "job" placeholder="О себе"
-          value="Исследователь океана" required minLength="2" maxLength="200" id="profile__input_about"></input>
-         <span className="popup__span-error" id="profile__input_about-error" ></span>
-         <button className="popup__button popup__button_form" type="submit">
-           Сохранить
-         </button>
-         </section>   */}        
-     
-     
      <section className="popup popup_card">
        <form className="popup__content" id="card-form" noValidate>
          <button
@@ -70,14 +53,6 @@ export default function Main(props) {
          </button>
        </form>
      </section>
-     
-{/*      <section className = "popup popup_delete">
-       <form className = "popup__delete-content">
-         <h3 className = "popup__title popup__title_delete">Вы уверены?</h3>
-         <button className="popup__close-btn" type="button"></button>
-         <button className="popup__button popup__button_delete" type="submit" aria-label="Да">Да</button>
-     </form>
-     </section> */}
      
    </main>
     )
