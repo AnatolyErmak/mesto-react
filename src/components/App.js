@@ -3,7 +3,7 @@ import Header from './header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm'
-import Card from './Card'
+import ImagePopup from './ImagePopup';
 
 function App() {
   // переменные состояния
@@ -11,7 +11,8 @@ function App() {
   const [isAvatarOpen, setIsAvatarOpen] = React.useState(false); // попап аватара
   const [isAddCardOpen, setIsAddCardOpen] = React.useState(false);
   const [deleteIsOpen, setdeleteIsOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({        // попап картинки
+  const [selectedCard, setSelectedCard] = React.useState({
+    isImageOpen: false,      // попап картинки
     link: '',
     name: ''
   });
@@ -20,6 +21,9 @@ function App() {
     setIsProfileOpen(false);
     setIsAddCardOpen(false);
     setIsAvatarOpen(false);
+    setSelectedCard((selectedCard) => {
+      return{...selectedCard, isImageOpen : false}
+    })
   }
   // хэндлер удаления 
   function handleDeleteClick() {
@@ -35,8 +39,9 @@ function App() {
   function handleEditAvatarClick() {
     setIsAvatarOpen(true);
   }
-  function handleCardClick (card) {
-    setSelectedCard(card);
+  function handleCardClick (cardData) {
+    const {link, name} = cardData
+    setSelectedCard({isImageOpen: true, link : link, name: name});
   }
   
     return ( 
@@ -46,13 +51,15 @@ function App() {
       onEditAvatar={handleEditAvatarClick}
       onEditProfile={handleEditProfileClick} 
       onAddPlace={handleAddPlaceClick}
+      onCardClick={handleCardClick} 
+      
       onDelete = {handleDeleteClick}
       profileIsOpenen={isProfileOpen}
       avatarIsOpen={isAvatarOpen} 
       addCardIsOpen={isAddCardOpen}
       deleteIsOpen = {deleteIsOpen}
-      card={selectedCard}
-      onCardClick={handleCardClick} 
+
+      
       onClose = {closeAllPopups}
       />
       <Footer/>
@@ -68,10 +75,10 @@ function App() {
       children = {
         <>
         <input className="popup__field popup__field_name" type="text" id="profile__input_name"
-         placeholder="Имя" value="Жак-Ив Кусто"required minLength="2" maxLength="40" name = "name"></input>
+         placeholder="Имя" required minLength="2" maxLength="40" name = "name"></input>
         <span className="popup__span-error" id="profile__input_name-error"></span>
         <input className="popup__field popup__field_about" type="text" name = "job" placeholder="О себе"
-        value="Исследователь океана" required minLength="2" maxLength="200" id="profile__input_about"></input>
+         required minLength="2" maxLength="200" id="profile__input_about"></input>
         <span className="popup__span-error" id="profile__input_about-error" ></span>
         </>
       } onClose = {closeAllPopups}
@@ -95,9 +102,13 @@ function App() {
         </>
       } onClose = {closeAllPopups}
       />
-      <Card card = {handleCardClick}/>
-      
-      
+      <ImagePopup
+      isOpen = {selectedCard.isImageOpen}
+      onClose = {closeAllPopups}
+      name = {selectedCard.name}
+      link =  {selectedCard.link}
+
+      />
     </div>          
   );
 

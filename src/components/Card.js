@@ -1,23 +1,25 @@
 import React from 'react';
-import App from './App'
 
 // компонент карточки 
 
 function Card (props) {
+  
+  const {card, onCardClick} = props
+
   function handleClick() {
-    props.onCardClick(props.card);
+    onCardClick(card)
   }
     // отрисовка 
-    console.log(props)
+    console.log(card.likes.lenght)
     return (
     <div className="element">
       <button className="element__trash" type="button"></button>
-      <img src={props.card.link} alt={props.card.name} class="element__image" onclick = {handleClick}/>
+      <img  className="element__image" alt = "изображение" onClick = {handleClick} src ={card.link}/>
       <div className="element__description">
-    <h3 className="element__title">{props.card.name}</h3>
+    <h3 className="element__title">{card.name}</h3>
         <div>
         <button button className="element__action" type="button"></button>
-    <p className = "element__like-counter">0</p>
+    <p className = "element__like-counter">{card.likes.lenght}</p>
         </div>
     </div>
   </div>
