@@ -21,9 +21,13 @@ function App() {
     setIsProfileOpen(false);
     setIsAddCardOpen(false);
     setIsAvatarOpen(false);
-    setSelectedCard((selectedCard) => {
-      return{...selectedCard, isImageOpen : false}
-    })
+    setSelectedCard({
+      isImageOpen: false,
+      link: '',
+      name: ''
+    }) 
+      
+    
   }
   // хэндлер удаления 
   function handleDeleteClick() {
