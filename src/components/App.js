@@ -91,10 +91,10 @@ function App() {
          {/* children */}
 
          <input className="popup__field popup__field_name" id="cardName" type="text" name = "name"
-           placeholder="Название" value="" required minLength="1" maxLength="30"></input>
+           placeholder="Название"  required minLength="1" maxLength="30"></input>
          <span className="popup__span-error" id="cardName-error"></span>
          <input className="popup__field popup__field_about" id="cardUrl" type="url"
-           name="link" placeholder="Ссылка на картинку" value="" required></input>
+           name="link" placeholder="Ссылка на картинку"  required></input>
          <span className="popup__span-error" id="cardUrl-error"></span>
        </PopupWithForm>
 
