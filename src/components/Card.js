@@ -10,7 +10,6 @@ function Card (props) {
     onCardClick(card)
   }
     // отрисовка 
-    console.log(card.likes)
     return (
     <div className="element">
       <button className="element__trash" type="button"></button>
@@ -18,7 +17,7 @@ function Card (props) {
       <div className="element__description">
     <h3 className="element__title">{card.name}</h3>
         <div>
-        <button button className="element__action" type="button"></button>
+        <button className="element__action" type="button"></button>
     <p className = "element__like-counter">{card.likes.length}</p>
         </div>
     </div>
