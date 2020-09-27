@@ -1,36 +1,18 @@
 import React from 'react';
 import api from '../utils/api';
 import Card from './Card';
+import { CurrentUserContext } from '../usercontext/CurrentUserContext';
 
 
 export default function Main(props) {
-// переменные состояния
-const [userName, setUserName] = React.useState() // Имя пользователя
-const [userDescription , setUserDescription] = React.useState() // описание пользователя
-const [userAvatar, setUserAvatar] = React.useState() // Аватар
-const [cards, setCards] = React.useState([]); // Массив карточек
+const {
+  cards,
+  onCardLike,
+  onCardDelete
+} = props
 
-React.useEffect(() => {
-  api.getUserInfo()
-    .then((data)=> {
-      setUserName(data.name)
-      setUserDescription(data.about)
-      setUserAvatar(data.avatar)
-    })
-    .catch((err) => {
-      console.log(`Произошла ошибка: ${err}`);
-    });
-}, [])
+const currentUser = React.useContext(CurrentUserContext);
 
-React.useEffect(() => {
-  api.getInitialCards()
-    .then((data) => {
-      setCards(data)
-    })
-    .catch((err) => {
-      console.log(`Произошла ошибка: ${err}`);
-  });
-}, [])
 
     return (
 <main className="main">
@@ -51,7 +33,9 @@ React.useEffect(() => {
          <Card
          key={card._id}
          card={card}
-         onCardClick={props.onCardClick}/>
+         onCardClick={props.onCardClick}
+         onCardLike={onCardLike}
+         onCardDelete={onCardDelete}/>
        ))}
       </section>        
    </main>

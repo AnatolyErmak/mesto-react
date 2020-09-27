@@ -4,9 +4,11 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup';
+import { CurrentUserContext } from '../usercontext/CurrentUserContext';
 
 function App() {
   // переменные состояния
+  const [currentUser, setCurrenUser] = React.useState({});
   const [isProfileOpen, setIsProfileOpen] = React.useState(false)
   const [isAvatarOpen, setIsAvatarOpen] = React.useState(false); // попап аватара
   const [isAddCardOpen, setIsAddCardOpen] = React.useState(false);
@@ -16,6 +18,7 @@ function App() {
     link: '',
     name: ''
   });
+  
   // функция закрытия попапов
   function closeAllPopups() {
     setIsProfileOpen(false);
@@ -49,6 +52,8 @@ function App() {
   }
   
     return ( 
+      // создаем контекст
+  <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
       <Header/>
       <Main
@@ -109,7 +114,8 @@ function App() {
       name = {selectedCard.name}
       link =  {selectedCard.link}
       />
-    </div>          
+    </div>
+    </CurrentUserContext.Provider>        
   );
 
 }
