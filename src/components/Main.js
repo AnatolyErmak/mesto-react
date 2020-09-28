@@ -1,11 +1,14 @@
 import React from 'react';
-import api from '../utils/api';
 import Card from './Card';
 import { CurrentUserContext } from '../usercontext/CurrentUserContext';
 
 
 export default function Main(props) {
 const {
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
   cards,
   onCardLike,
   onCardDelete
@@ -18,14 +21,14 @@ const currentUser = React.useContext(CurrentUserContext);
 <main className="main">
      
      <section className="profile">
-       <img src={userAvatar} alt="Avatar" className="profile__avatar" />
-       <div className="profile__img-hover" onClick ={props.onEditAvatar}></div>
+       <img src={currentUser.avatar } alt="Avatar" className="profile__avatar" />
+       <div className="profile__img-hover" onClick ={onEditAvatar}></div>
        <div className="profile__info">
-      <h1 className="profile__name">{userName}</h1>
-          <button className="profile__edit-btn" type="button" onClick = {props.onEditProfile}></button>
-    <p className="profile__about">{userDescription}</p>
+      <h1 className="profile__name">{currentUser.name}</h1>
+          <button className="profile__edit-btn" type="button" onClick = {onEditProfile}></button>
+    <p className="profile__about">{currentUser.about}</p>
        </div>
-       <button className="profile__add-btn" type="button" onClick = {props.onAddPlace}></button>
+       <button className="profile__add-btn" type="button" onClick = {onAddPlace}></button>
      </section>
 
      <section className="elements">
@@ -33,7 +36,7 @@ const currentUser = React.useContext(CurrentUserContext);
          <Card
          key={card._id}
          card={card}
-         onCardClick={props.onCardClick}
+         onCardClick={onCardClick}
          onCardLike={onCardLike}
          onCardDelete={onCardDelete}/>
        ))}

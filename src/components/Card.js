@@ -12,7 +12,10 @@ function Card (props) {
   } = props
 
   const currentUser = React.useContext(CurrentUserContext);
-  const isMyOwner = card._id === currentUser._id
+  const isMyOwner = card.owner._id === currentUser._id
+  console.log(card.owner._id)
+  console.log(currentUser._id)
+  
 
   const cardDeleteButton = (`element__trash ${isMyOwner ? 'element__trash_active' : ''}`)
 

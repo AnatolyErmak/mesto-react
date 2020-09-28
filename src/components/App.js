@@ -5,6 +5,8 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../usercontext/CurrentUserContext';
+import  api  from '../utils/api';
+
 
 function App() {
   // переменные состояния
@@ -50,6 +52,38 @@ function App() {
     const {link, name} = cardData
     setSelectedCard({isImageOpen: true, link : link, name: name});
   }
+  // _______________________________________cards
+
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((data) => {
+        setCurrenUser(data);
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((data) => {
+        setCards(data)
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+    });
+  }, [])
+
+  function handleCardDelete (card) {
+    api.deleteCard(card._id)
+        .then(() => {
+            const newCards = cards.filter(item => item._id !== card._id);
+            setCards(newCards);
+        })
+        .catch(err => console.log(err))
+}
   
     return ( 
       // создаем контекст
@@ -57,6 +91,9 @@ function App() {
     <div className="page">
       <Header/>
       <Main
+
+      onCardDelete = {handleCardDelete}
+
       onEditAvatar={handleEditAvatarClick}
       onEditProfile={handleEditProfileClick} 
       onAddPlace={handleAddPlaceClick}
@@ -67,6 +104,9 @@ function App() {
       avatarIsOpen={isAvatarOpen} 
       addCardIsOpen={isAddCardOpen}
       deleteIsOpen = {deleteIsOpen}
+      cards={cards}
+
+      
 
       
       onClose = {closeAllPopups}
