@@ -8,21 +8,26 @@ function Card (props) {
   const {card, 
         onCardClick,
         onCardLike,
+        onCardDislike,
         onCardDelete
   } = props
 
   const currentUser = React.useContext(CurrentUserContext);
   const isMyOwner = card.owner._id === currentUser._id
-  console.log(card.owner._id)
-  console.log(currentUser._id)
   
 
   const cardDeleteButton = (`element__trash ${isMyOwner ? 'element__trash_active' : ''}`)
 
-  const isLiked = card.likes.some(i => i._id === currentUser._id);
+  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  const isLiked = card.likes.some( i => i._id  === currentUser._id );
+  card.likes.some(((i) =>{
+    console.log(i._id , currentUser._id )
+    return i._id === currentUser._id  }))
+  
+  
 
   const cardLikeButton = (
-    `element__action ${isLiked} ? 'element__action_active' : ''}`
+    `element__action ${isLiked ? 'element__action_active' : ''} }`
   )
 
   function handleClick() {
@@ -32,6 +37,10 @@ function Card (props) {
   function handleLikeClick() {
     onCardLike(card);
 }
+
+  function handleDislikeClick() {
+    onCardDislike(card);
+  }
 
   function handleDeleteClick() {
     onCardDelete(card);
@@ -44,7 +53,8 @@ function Card (props) {
       <div className="element__description">
     <h3 className="element__title">{card.name}</h3>
         <div>
-        <button onClick={handleLikeClick} className={`${cardLikeButton}`} type="button"></button>
+        <button onClick={() => { if (isLiked) {  handleDislikeClick() } else {  handleLikeClick() } }} className={`${cardLikeButton}`} type="button"></button>
+        {console.log(isLiked)}
     <p className = "element__like-counter">{card.likes.length}</p>
         </div>
     </div>

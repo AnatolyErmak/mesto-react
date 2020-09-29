@@ -84,7 +84,30 @@ function App() {
         })
         .catch(err => console.log(err))
 }
-  
+
+// ___________________________________ лайки
+
+function handleCardLike(card) {
+  api.putLike(card._id)
+    .then((newCard) => {
+      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+      setCards(newCards);
+    })
+    .catch((err) => {
+      console.log(`Произошла ошибка: ${err}`);
+    });
+}
+
+function handleCardDislike(card) {
+  api.deleteLike(card._id)
+  .then((newCard) => {
+    const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+    setCards(newCards);
+  })
+  .catch((err) => {
+    console.log(`Произошла ошибка: ${err}`);
+  });
+}
     return ( 
       // создаем контекст
   <CurrentUserContext.Provider value={currentUser}>
@@ -105,6 +128,9 @@ function App() {
       addCardIsOpen={isAddCardOpen}
       deleteIsOpen = {deleteIsOpen}
       cards={cards}
+
+      onCardLike = {handleCardLike}
+      onCardDislike = {handleCardDislike}
 
       
 

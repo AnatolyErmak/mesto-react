@@ -11,6 +11,7 @@ const {
   onCardClick,
   cards,
   onCardLike,
+  onCardDislike,
   onCardDelete
 } = props
 
@@ -38,6 +39,7 @@ const currentUser = React.useContext(CurrentUserContext);
          card={card}
          onCardClick={onCardClick}
          onCardLike={onCardLike}
+         onCardDislike = {onCardDislike}
          onCardDelete={onCardDelete}/>
        ))}
       </section>        
