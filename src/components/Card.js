@@ -21,7 +21,7 @@ function Card (props) {
   // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
   const isLiked = card.likes.some( i => i._id  === currentUser._id );
   card.likes.some(((i) =>{
-    console.log(i._id , currentUser._id )
+    
     return i._id === currentUser._id  }))
   
   
@@ -54,7 +54,6 @@ function Card (props) {
     <h3 className="element__title">{card.name}</h3>
         <div>
         <button onClick={() => { if (isLiked) {  handleDislikeClick() } else {  handleLikeClick() } }} className={`${cardLikeButton}`} type="button"></button>
-        {console.log(isLiked)}
     <p className = "element__like-counter">{card.likes.length}</p>
         </div>
     </div>

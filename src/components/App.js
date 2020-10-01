@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../usercontext/CurrentUserContext';
 import  api  from '../utils/api';
+import AddPlacePopup from './AddPlacePopup'
 
 
 function App() {
@@ -75,6 +76,20 @@ function App() {
         console.log(`Произошла ошибка: ${err}`);
     });
   }, [])
+
+  function handleAddPlaceSubmit(data) {
+    
+    api.postNewCard(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      })
+  }
+
+
 
   function handleCardDelete (card) {
     api.deleteCard(card._id)
@@ -156,18 +171,13 @@ function handleCardDislike(card) {
 
       </PopupWithForm>
 
-      <PopupWithForm name = "popup_card" isOpen = {isAddCardOpen} title = "Новое место"
-       onClose = {closeAllPopups}>
+      <AddPlacePopup 
+        isOpen = {isAddCardOpen}
+        onClose = {closeAllPopups}
+        onAddPlace = {handleAddPlaceSubmit}
+        >
 
-         {/* children */}
-
-         <input className="popup__field popup__field_name" id="cardName" type="text" name = "name"
-           placeholder="Название"  required minLength="1" maxLength="30"></input>
-         <span className="popup__span-error" id="cardName-error"></span>
-         <input className="popup__field popup__field_about" id="cardUrl" type="url"
-           name="link" placeholder="Ссылка на картинку"  required></input>
-         <span className="popup__span-error" id="cardUrl-error"></span>
-       </PopupWithForm>
+       </AddPlacePopup>
 
       <PopupWithForm name = "popup_delete" isOpen = {deleteIsOpen} title = "Вы уверены?" onClose = {closeAllPopups}>
             {/* children */}
