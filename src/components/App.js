@@ -1,10 +1,9 @@
 import React from 'react';
-import Header from './header';
+import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup';
-import { CurrentUserContext } from '../usercontext/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import  api  from '../utils/api';
 import AddPlacePopup from './AddPlacePopup'
 import EditProfilePopup from './EditProfilePopup'
@@ -17,7 +16,6 @@ function App() {
   const [isProfileOpen, setIsProfileOpen] = React.useState(false)
   const [isAvatarOpen, setIsAvatarOpen] = React.useState(false); // попап аватара
   const [isAddCardOpen, setIsAddCardOpen] = React.useState(false);
-  const [deleteIsOpen, setdeleteIsOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
     isImageOpen: false,      // попап картинки
     link: '',
@@ -37,10 +35,7 @@ function App() {
       
     
   }
-  // хэндлер удаления 
-  function handleDeleteClick() {
-    setdeleteIsOpen(true)
-  }
+
   // Хэндлеры для открытия попапов
   function handleEditProfileClick() {
     setIsProfileOpen(true);
@@ -164,7 +159,7 @@ function handleCardDislike(card) {
       onCardDislike = {handleCardDislike}
       cards={cards}
 
-      onDelete = {handleDeleteClick}
+
       />
       <Footer/>
       <EditAvatarPopup

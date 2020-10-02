@@ -1,5 +1,5 @@
 import React from 'react';
-import { CurrentUserContext } from '../usercontext/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 // компонент карточки 
 
@@ -45,6 +45,13 @@ function Card (props) {
   function handleDeleteClick() {
     onCardDelete(card);
   }
+
+  function onClick() {
+     if (isLiked) {  handleDislikeClick()
+     } else { 
+        handleLikeClick()}
+  }
+
     // отрисовка 
     return (
     <div className="element">
@@ -53,7 +60,7 @@ function Card (props) {
       <div className="element__description">
     <h3 className="element__title">{card.name}</h3>
         <div>
-        <button onClick={() => { if (isLiked) {  handleDislikeClick() } else {  handleLikeClick() } }} className={`${cardLikeButton}`} type="button"></button>
+        <button onClick={onClick} className={`${cardLikeButton}`} type="button"></button>
     <p className = "element__like-counter">{card.likes.length}</p>
         </div>
     </div>

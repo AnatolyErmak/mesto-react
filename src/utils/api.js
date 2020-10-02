@@ -1,5 +1,6 @@
 // Токен: 13de1ca2-8912-41c4-9088-2a3599664c41
 // Идентификатор группы: cohort-14
+
 class Api {
     constructor(options) {
         this._url = options.baseUrl
@@ -15,36 +16,21 @@ class Api {
                     link: formData.link
                 })
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`${res.status} ${res.statusText}`);
-            })
+            .then(handleResponse)
     }
 
     getInitialCards() {
         return fetch(`${this._url}/cards`, {
                 headers: this._headers
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`${res.status} ${res.statusText}`);
-            })
+            .then(handleResponse)
     }
 
     getUserInfo() {
         return fetch(`${this._url}/users/me`, {
                 headers: this._headers
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Error: ${res.status} ${res.statusText}`);
-            })
+            .then(handleResponse)
     }
 
     setUserInfo(newUserData) {
@@ -56,12 +42,7 @@ class Api {
                     about: newUserData.about
                 })
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`${res.status} ${res.statusText}`);
-            })
+            .then(handleResponse)
     }
 
     setUserAvatar(newUserData) {
@@ -72,12 +53,7 @@ class Api {
                     avatar: newUserData.avatar
                 })
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Error: ${res.status} ${res.statusText}`)
-            })
+            .then(handleResponse)
     }
 
     putLike(cardId) {
@@ -86,12 +62,7 @@ class Api {
                 method: 'PUT',
                 headers: this._headers
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Error: ${res.status} ${res.statusText}`)
-            })
+            .then(handleResponse)
     }
 
     deleteLike(cardId) {
@@ -99,12 +70,7 @@ class Api {
                 method: 'DELETE',
                 headers: this._headers
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Error: ${res.status} ${res.statusText}`)
-            })
+            .then(handleResponse)
     }
 
     deleteCard(cardId) {
@@ -112,14 +78,16 @@ class Api {
                 method: 'DELETE',
                 headers: this._headers
             })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Error: ${res.status} ${res.statusText}`)
-            })
+            .then(handleResponse)
     }
 }
+
+const handleResponse = res => {
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`${res.status} ${res.statusText}`);
+  }
 
 const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-14',
@@ -128,5 +96,7 @@ const api = new Api({
       'Content-Type': 'application/json'
     }
 })
+
+
 
 export default api
