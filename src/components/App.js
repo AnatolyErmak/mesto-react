@@ -1,27 +1,26 @@
-import React from 'react';
-import Header from './Header';
-import Main from './Main';
-import Footer from './Footer';
-import ImagePopup from './ImagePopup';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import  api  from '../utils/api';
-import AddPlacePopup from './AddPlacePopup'
-import EditProfilePopup from './EditProfilePopup'
-import EditAvatarPopup from './EditAvatarPopup '
-
+import React from "react";
+import Header from "./Header";
+import Main from "./Main";
+import Footer from "./Footer";
+import ImagePopup from "./ImagePopup";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import api from "../utils/api";
+import AddPlacePopup from "./AddPlacePopup";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup ";
 
 function App() {
   // переменные состояния
   const [currentUser, setCurrenUser] = React.useState({});
-  const [isProfileOpen, setIsProfileOpen] = React.useState(false)
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = React.useState(false); // попап аватара
   const [isAddCardOpen, setIsAddCardOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
-    isImageOpen: false,      // попап картинки
-    link: '',
-    name: ''
+    isImageOpen: false, // попап картинки
+    link: "",
+    name: "",
   });
-  
+
   // функция закрытия попапов
   function closeAllPopups() {
     setIsProfileOpen(false);
@@ -29,11 +28,9 @@ function App() {
     setIsAvatarOpen(false);
     setSelectedCard({
       isImageOpen: false,
-      link: '',
-      name: ''
-    }) 
-      
-    
+      link: "",
+      name: "",
+    });
   }
 
   // Хэндлеры для открытия попапов
@@ -46,16 +43,17 @@ function App() {
   function handleEditAvatarClick() {
     setIsAvatarOpen(true);
   }
-  function handleCardClick (cardData) {
-    const {link, name} = cardData
-    setSelectedCard({isImageOpen: true, link : link, name: name});
+  function handleCardClick(cardData) {
+    const { link, name } = cardData;
+    setSelectedCard({ isImageOpen: true, link: link, name: name });
   }
   // _______________________________________cards
 
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api.getUserInfo()
+    api
+      .getUserInfo()
       .then((data) => {
         setCurrenUser(data);
       })
@@ -65,134 +63,131 @@ function App() {
   }, []);
 
   function handleUpdateUser(data) {
-
-    api.setUserInfo(data)
+    api
+      .setUserInfo(data)
       .then((data) => {
         setCurrenUser(data);
         closeAllPopups();
       })
       .catch((err) => {
         console.log(`Произошла ошибка: ${err}`);
-      })
+      });
   }
 
   function handleUpdateAvatar(data) {
-    console.log(data)
-    api.setUserAvatar(data)
+    console.log(data);
+    api
+      .setUserAvatar(data)
       .then((data) => {
         setCurrenUser(data);
         closeAllPopups();
       })
       .catch((err) => {
         console.log(`Произошла ошибка: ${err}`);
-      })
+      });
   }
 
   React.useEffect(() => {
-    api.getInitialCards()
+    api
+      .getInitialCards()
       .then((data) => {
-        setCards(data)
+        setCards(data);
       })
       .catch((err) => {
         console.log(`Произошла ошибка: ${err}`);
-    });
-  }, [])
+      });
+  }, []);
 
   function handleAddPlaceSubmit(data) {
-    
-    api.postNewCard(data)
+    api
+      .postNewCard(data)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
       .catch((err) => {
         console.log(`Произошла ошибка: ${err}`);
-      })
+      });
   }
 
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        const newCards = cards.filter((item) => item._id !== card._id);
+        setCards(newCards);
+      })
+      .catch((err) => console.log(err));
+  }
 
+  // ___________________________________ лайки
 
-  function handleCardDelete (card) {
-    api.deleteCard(card._id)
-        .then(() => {
-            const newCards = cards.filter(item => item._id !== card._id);
-            setCards(newCards);
-        })
-        .catch(err => console.log(err))
-}
+  function handleCardLike(card) {
+    api
+      .putLike(card._id)
+      .then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      });
+  }
 
-// ___________________________________ лайки
+  function handleCardDislike(card) {
+    api
+      .deleteLike(card._id)
+      .then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      });
+  }
+  return (
+    // создаем контекст
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <Header />
+        <Main
+          onCardDelete={handleCardDelete}
+          onEditAvatar={handleEditAvatarClick}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDislike={handleCardDislike}
+          cards={cards}
+        />
+        <Footer />
+        <EditAvatarPopup
+          onUpdateAvatar={handleUpdateAvatar}
+          isOpen={isAvatarOpen}
+          onClose={closeAllPopups}
+        ></EditAvatarPopup>
 
-function handleCardLike(card) {
-  api.putLike(card._id)
-    .then((newCard) => {
-      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-      setCards(newCards);
-    })
-    .catch((err) => {
-      console.log(`Произошла ошибка: ${err}`);
-    });
-}
+        <EditProfilePopup
+          isOpen={isProfileOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        ></EditProfilePopup>
 
-function handleCardDislike(card) {
-  api.deleteLike(card._id)
-  .then((newCard) => {
-    const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-    setCards(newCards);
-  })
-  .catch((err) => {
-    console.log(`Произошла ошибка: ${err}`);
-  });
-}
-    return ( 
-      // создаем контекст
-  <CurrentUserContext.Provider value={currentUser}>
-    <div className="page">
-      <Header/>
-      <Main
-      onCardDelete = {handleCardDelete}
-      onEditAvatar={handleEditAvatarClick}
-      onEditProfile={handleEditProfileClick} 
-      onAddPlace={handleAddPlaceClick}
-      onCardClick={handleCardClick} 
-      onCardLike = {handleCardLike}
-      onCardDislike = {handleCardDislike}
-      cards={cards}
+        <AddPlacePopup
+          isOpen={isAddCardOpen}
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+        ></AddPlacePopup>
 
-
-      />
-      <Footer/>
-      <EditAvatarPopup
-        onUpdateAvatar = {handleUpdateAvatar}
-        isOpen = {isAvatarOpen}
-        onClose = {closeAllPopups}
-        >
-      </EditAvatarPopup>
-        
-      <EditProfilePopup
-      isOpen = {isProfileOpen}
-      onClose={closeAllPopups}
-      onUpdateUser ={handleUpdateUser}
-      >
-      </EditProfilePopup>
-
-      <AddPlacePopup 
-        isOpen = {isAddCardOpen}
-        onClose = {closeAllPopups}
-        onAddPlace = {handleAddPlaceSubmit}
-        >
-       </AddPlacePopup>
-
-      <ImagePopup
-      isOpen = {selectedCard.isImageOpen}
-      onClose = {closeAllPopups}
-      name = {selectedCard.name}
-      link =  {selectedCard.link}
-      />
-    </div>
-    </CurrentUserContext.Provider>        
+        <ImagePopup
+          isOpen={selectedCard.isImageOpen}
+          onClose={closeAllPopups}
+          name={selectedCard.name}
+          link={selectedCard.link}
+        />
+      </div>
+    </CurrentUserContext.Provider>
   );
-
 }
 
 export default App;

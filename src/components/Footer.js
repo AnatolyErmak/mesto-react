@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 export default function Footer() {
-    return (
+  return (
     <footer className="footer">
-        <p className="footer__author">&#169;2020. Ермаков Анатолий</p>
+      <p className="footer__author">&#169;2020. Ермаков Анатолий</p>
     </footer>
-    )
+  );
 }
