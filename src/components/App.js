@@ -7,6 +7,8 @@ import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../usercontext/CurrentUserContext';
 import  api  from '../utils/api';
 import AddPlacePopup from './AddPlacePopup'
+import EditProfilePopup from './EditProfilePopup'
+import EditAvatarPopup from './EditAvatarPopup '
 
 
 function App() {
@@ -66,6 +68,30 @@ function App() {
         console.log(`Произошла ошибка: ${err}`);
       });
   }, []);
+
+  function handleUpdateUser(data) {
+
+    api.setUserInfo(data)
+      .then((data) => {
+        setCurrenUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      })
+  }
+
+  function handleUpdateAvatar(data) {
+    console.log(data)
+    api.setUserAvatar(data)
+      .then((data) => {
+        setCurrenUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Произошла ошибка: ${err}`);
+      })
+  }
 
   React.useEffect(() => {
     api.getInitialCards()
@@ -129,60 +155,38 @@ function handleCardDislike(card) {
     <div className="page">
       <Header/>
       <Main
-
       onCardDelete = {handleCardDelete}
-
       onEditAvatar={handleEditAvatarClick}
       onEditProfile={handleEditProfileClick} 
       onAddPlace={handleAddPlaceClick}
       onCardClick={handleCardClick} 
-      
-      onDelete = {handleDeleteClick}
-      profileIsOpenen={isProfileOpen}
-      avatarIsOpen={isAvatarOpen} 
-      addCardIsOpen={isAddCardOpen}
-      deleteIsOpen = {deleteIsOpen}
-      cards={cards}
-
       onCardLike = {handleCardLike}
       onCardDislike = {handleCardDislike}
+      cards={cards}
 
-      
-
-      
-      onClose = {closeAllPopups}
+      onDelete = {handleDeleteClick}
       />
       <Footer/>
-      <PopupWithForm name = "popup_avatar" isOpen = {isAvatarOpen} title = "Обновить аватар" onClose = {closeAllPopups}>
-        {/* children */}
-        <input className="popup__field" id="avatar-url-input" name="avatar" type="url" placeholder="Введите url" required></input>
-        <span className="popup__span-error" id="avatar-url-input-error"></span>
-
-      </PopupWithForm>
-   
-      <PopupWithForm name = "popup_profile" isOpen = {isProfileOpen} title = "Редактировать профиль" onClose = {closeAllPopups}>
-          {/* children */}
-        <input className="popup__field popup__field_name" type="text" id="profile__input_name"
-         placeholder="Имя" required minLength="2" maxLength="40" name = "name"></input>
-        <span className="popup__span-error" id="profile__input_name-error"></span>
-        <input className="popup__field popup__field_about" type="text" name = "job" placeholder="О себе"
-         required minLength="2" maxLength="200" id="profile__input_about"></input>
-        <span className="popup__span-error" id="profile__input_about-error" ></span>
-
-      </PopupWithForm>
+      <EditAvatarPopup
+        onUpdateAvatar = {handleUpdateAvatar}
+        isOpen = {isAvatarOpen}
+        onClose = {closeAllPopups}
+        >
+      </EditAvatarPopup>
+        
+      <EditProfilePopup
+      isOpen = {isProfileOpen}
+      onClose={closeAllPopups}
+      onUpdateUser ={handleUpdateUser}
+      >
+      </EditProfilePopup>
 
       <AddPlacePopup 
         isOpen = {isAddCardOpen}
         onClose = {closeAllPopups}
         onAddPlace = {handleAddPlaceSubmit}
         >
-
        </AddPlacePopup>
-
-      <PopupWithForm name = "popup_delete" isOpen = {deleteIsOpen} title = "Вы уверены?" onClose = {closeAllPopups}>
-            {/* children */}
-          <button className="popup__button popup__button_delete" type="submit" aria-label="Да">Да</button>
-      </PopupWithForm>
 
       <ImagePopup
       isOpen = {selectedCard.isImageOpen}

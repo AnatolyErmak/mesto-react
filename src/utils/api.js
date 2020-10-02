@@ -53,7 +53,7 @@ class Api {
                 headers: this._headers,
                 body: JSON.stringify({
                     name: newUserData.name,
-                    about: newUserData.job
+                    about: newUserData.about
                 })
             })
             .then((res) => {
